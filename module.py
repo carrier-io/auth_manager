@@ -32,7 +32,8 @@ from .models.token_pd import AuthCreds
 from .rpc import get_users, get_groups, put_entity, post_entity, post_group, delete_entity, \
     add_users_to_groups, expel_users_from_groups, add_subgroup
 from .utils.tools import add_resource_to_api, get_token
-from plugins.auth_root.utils.decorators import push_kwargs
+
+from ..auth_root.utils.decorators import push_kwargs
 
 
 class Module(module.ModuleModel):
