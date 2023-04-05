@@ -32,26 +32,27 @@ from .models.token_pd import AuthCreds
 from .rpc import get_users, get_groups, put_entity, post_entity, post_group, delete_entity, \
     add_users_to_groups, expel_users_from_groups, add_subgroup
 from .utils.tools import add_resource_to_api, get_token
-from plugins.auth_root.utils.decorators import push_kwargs
+
+from ..auth_root.utils.decorators import push_kwargs
 
 
 class Module(module.ModuleModel):
     """ Pylon module """
 
-    def __init__(self, settings, root_path, context):
-        self.settings = settings
-        self.root_path = root_path
+    def __init__(self, context, descriptor):
         self.context = context
+        self.descriptor = descriptor
         self.rpc_prefix = None
+        #
+        self.settings = self.descriptor.config
 
     def init(self):
         """ Init module """
         log.info('Initializing module auth_manager')
-        _, _, root_module = self.context.module_manager.get_module("auth_root")
-        root_settings = root_module.settings
+        root_settings = self.context.module_manager.modules["auth_root"].config
 
         self.rpc_prefix = root_settings['rpc_manager']['prefix']['manager']
-        url_prefix = f'{self.context.url_prefix}/{self.settings["endpoints"]["root"]}/'
+        url_prefix = f'/{self.settings["endpoints"]["root"]}'
 
         BaseResource.set_settings(
             self.settings,
@@ -143,10 +144,8 @@ class Module(module.ModuleModel):
         )
 
         # blueprint endpoints
-        bp = flask.Blueprint(
-            'auth_manager', 'plugins.auth_manager',
-            root_path=self.root_path,
-            url_prefix=url_prefix
+        bp = self.descriptor.make_blueprint(
+            url_prefix=url_prefix,
         )
         bp.add_url_rule('/clear_token', 'clear_token', self.clear_token, methods=['GET'])
         # Register in app
