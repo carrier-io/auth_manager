@@ -25,7 +25,7 @@ from .utils.tools import get_id, get_id_from_headers, api_data_response
 # !!!base_url is included in rpc, but can be overridden!!!
 
 
-# rpc_name: auth_manager_get_user
+# rpc_name: auth_manager_get_users
 def get_users(
         *, base_url: str, realm: str, token: Token,
         user_or_id: Optional[Union[str, UserRepresentation]] = None,
@@ -259,3 +259,6 @@ def add_subgroup(
         base_url=url, realm=realm, token=token,
         entity=child, response_debug_processor=response_debug_processor
     )
+
+def create_user_representation(user_data: dict) -> UserRepresentation:
+    return UserRepresentation.parse_obj(user_data)
