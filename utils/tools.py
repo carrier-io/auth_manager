@@ -32,13 +32,13 @@ def add_resource_to_api(api: Api, resource: Resource, *urls, **kwargs) -> None:
 
 
 def get_token(url: str, creds: AuthCreds) -> Token:
-    response = requests.post(url, data=creds.dict())
+    response = requests.post(url, data=creds.dict(), verify=False)
     token = Token.parse_obj(response.json())
     return token
 
 
 def refresh_token(url: str, creds: RefreshCreds) -> Token:
-    response = requests.post(url, data=creds.dict())
+    response = requests.post(url, data=creds.dict(), verify=False)
     if not response.ok:
         raise TokenRefreshError(response.json())
     token = Token.parse_obj(response.json())

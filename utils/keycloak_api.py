@@ -35,7 +35,7 @@ class KeyCloakAPI:
             **kwargs
     ) -> ApiResponse:
         headers = {'Authorization': str(token)}
-        response = requests.get(url, headers=headers, params=kwargs)
+        response = requests.get(url, headers=headers, params=kwargs, verify=False)
         return api_response(
             response, response_debug_processor=response_debug_processor, response_data_type=response_data_type)
 
@@ -47,7 +47,7 @@ class KeyCloakAPI:
             response_debug_processor: DebugProcessorType = None
     ) -> ApiResponse:
         headers = {'Authorization': str(token), 'Content-Type': 'application/json'}
-        response = requests.put(url, headers=headers, json=body.dict(exclude_unset=True))
+        response = requests.put(url, headers=headers, json=body.dict(exclude_unset=True), verify=False)
         return api_response(response, response_debug_processor=response_debug_processor)
 
     @staticmethod
@@ -58,7 +58,7 @@ class KeyCloakAPI:
             response_debug_processor: DebugProcessorType = None
     ) -> ApiResponse:
         headers = {'Authorization': str(token), 'Content-Type': 'application/json'}
-        response = requests.post(url, headers=headers, json=body.dict(exclude_unset=True))
+        response = requests.post(url, headers=headers, json=body.dict(exclude_unset=True), verify=False)
         print('SOME POST RESP HEADERS', response.headers)
         return api_response(response, response_debug_processor=response_debug_processor)
 
@@ -69,7 +69,7 @@ class KeyCloakAPI:
             response_debug_processor: DebugProcessorType = None
     ) -> ApiResponse:
         headers = {'Authorization': str(token)}
-        response = requests.delete(url, headers=headers)
+        response = requests.delete(url, headers=headers, verify=False)
         return api_response(response, response_debug_processor=response_debug_processor)
 
     @staticmethod
@@ -112,7 +112,7 @@ class KeyCloakAPI:
         group_id = get_id(group)
         url = f'{user_url.rstrip("/")}/{user_id}/groups/{group_id}'
         headers = {'Authorization': str(token)}
-        response = requests.put(url, headers=headers)
+        response = requests.put(url, headers=headers, verify=False)
         return api_response(response, response_debug_processor=response_debug_processor)
 
     @staticmethod
@@ -127,7 +127,7 @@ class KeyCloakAPI:
         group_id = get_id(group)
         url = f'{user_url.rstrip("/")}/{user_id}/groups/{group_id}'
         headers = {'Authorization': str(token)}
-        response = requests.delete(url, headers=headers)
+        response = requests.delete(url, headers=headers, verify=False)
         return api_response(response, response_debug_processor=response_debug_processor)
 
     @staticmethod
@@ -141,5 +141,5 @@ class KeyCloakAPI:
         parent_id = get_id(parent)
         url = f'{group_url.rstrip("/")}/{parent_id}/children'
         headers = {'Authorization': str(token), 'Content-Type': 'application/json'}
-        response = requests.post(url, headers=headers, json=child.dict(exclude_unset=True))
+        response = requests.post(url, headers=headers, json=child.dict(exclude_unset=True), verify=False)
         return api_response(response, response_debug_processor=response_debug_processor)
